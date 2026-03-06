@@ -25,4 +25,29 @@ export class UserService {
         throw error;
       });
   }
+
+  create(user: User): Promise<User> {
+    return fetch(this.apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((errorMessage) => {
+            throw { status: response.status, message: errorMessage };
+          });
+        }
+        return response.json();
+      })
+      .then((data: User) => {
+        return data;
+      })
+      .catch((error) => {
+        console.error("Error creating user: ", error.status, error.message);
+        throw error;
+      });
+  }
 }
