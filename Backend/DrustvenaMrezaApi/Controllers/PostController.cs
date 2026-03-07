@@ -19,7 +19,7 @@ namespace DrustvenaMrezaApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<PostController>> GetAll()
+        public ActionResult<List<Post>> GetAll()
         {
             try
             {

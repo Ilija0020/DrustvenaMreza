@@ -65,8 +65,7 @@ function renderData(data: User[]) {
     newRow.appendChild(cell3);
 
     const cell4 = document.createElement("td");
-    const date = new Date(user.dateOfBirth);
-    cell4.textContent = date.toISOString().split("T")[0];
+    cell4.textContent = user.dateOfBirth.toString().split("T")[0];
     newRow.appendChild(cell4);
 
     const cell5 = document.createElement("td");

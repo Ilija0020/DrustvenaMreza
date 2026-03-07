@@ -83,7 +83,7 @@ namespace DrustvenaMrezaApi.Controllers
             }
         }
         [HttpPut("{id}")]
-        public ActionResult<User> Update(int id, [FromBody] Group updatedGroup)
+        public ActionResult<Group> Update(int id, [FromBody] Group updatedGroup)
         {
             if(string.IsNullOrWhiteSpace(updatedGroup.Name))
             {

@@ -151,14 +151,15 @@ namespace DrustvenaMrezaApi.Repositories
         {
             try
             {
-                using SqliteConnection connection = new SqliteConnection();
+                using SqliteConnection connection = new SqliteConnection(connectionString);
                 connection.Open();
                 string query = @"UPDATE Groups SET Name = @Name, CreationDate = @CreationDate
-                                WHERE Id = Id";
+                                WHERE Id = @Id";
 
                 using SqliteCommand command = new SqliteCommand(query, connection);
+                command.Parameters.AddWithValue("@Id", updatedGroup.Id);
                 command.Parameters.AddWithValue("@Name",updatedGroup.Name);
-                command.Parameters.AddWithValue("@CreationDate", updatedGroup.CreatedDate);
+                command.Parameters.AddWithValue("@CreationDate", updatedGroup.CreatedDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
 
                 int rowsAffected = command.ExecuteNonQuery();
                 {

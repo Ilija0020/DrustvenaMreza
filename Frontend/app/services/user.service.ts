@@ -50,4 +50,48 @@ export class UserService {
         throw error;
       });
   }
+
+  getById(id: number): Promise<User> {
+    return fetch(this.apiUrl + "/" + id)
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((errorMessage) => {
+            throw { status: response.status, message: errorMessage };
+          });
+        }
+        return response.json();
+      })
+      .then((data: User) => {
+        return data;
+      })
+      .catch((error) => {
+        console.error("Error getting user: ", error.status, error.message);
+        throw error;
+      });
+  }
+
+  update(id: number, user: User): Promise<User> {
+    return fetch(this.apiUrl + "/" + id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((errorMessage) => {
+            throw { status: response.status, message: errorMessage };
+          });
+        }
+        return response.json();
+      })
+      .then((data: User) => {
+        return data;
+      })
+      .catch((error) => {
+        console.error("Error updating user: ", error.status, error.message);
+        throw error;
+      });
+  }
 }
