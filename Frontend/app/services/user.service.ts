@@ -94,4 +94,21 @@ export class UserService {
         throw error;
       });
   }
+
+  delete(id: number): Promise<void> {
+    return fetch(this.apiUrl + "/" + id, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((errorMessage) => {
+            throw { status: response.status, message: errorMessage };
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error deleting user: ", error.status, error.message);
+        throw error;
+      });
+  }
 }

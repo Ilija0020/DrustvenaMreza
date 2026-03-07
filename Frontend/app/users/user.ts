@@ -77,6 +77,22 @@ function renderData(data: User[]) {
       window.location.href = `../usersForm/usersForm.html?id=${user.id}`;
     });
     cell5.appendChild(editBtn);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+    deleteBtn.className = "btn-delete";
+
+    deleteBtn.addEventListener("click", () => {
+      userService
+        .delete(user.id)
+        .then(() => {
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error("Error deleting user: ", error.status, error.message);
+        });
+    });
+    cell5.appendChild(deleteBtn);
     newRow.appendChild(cell5);
 
     tableBody.appendChild(newRow);

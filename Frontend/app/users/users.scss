@@ -56,11 +56,22 @@
       padding: 15px 20px;
       text-transform: uppercase;
       text-align: left;
+
+      &:last-child {
+        text-align: center;
+      }
     }
 
     tbody td {
       padding: 15px 20px;
       border-bottom: 1px solid #eee;
+
+      &:last-child {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+      }
     }
 
     tbody tr:hover {
@@ -78,6 +89,14 @@
 
       &:hover {
         background-color: darken($primary-color, 10%);
+      }
+    }
+
+    .btn-delete {
+      background-color: #e74c3c;
+
+      &:hover {
+        background-color: #c0392b;
       }
     }
   }
