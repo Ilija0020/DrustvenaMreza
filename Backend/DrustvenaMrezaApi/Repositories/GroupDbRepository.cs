@@ -16,7 +16,54 @@ namespace DrustvenaMrezaApi.Repositories
             connectionString = configuration["ConnectionString:SQLiteConnection"];
         }
 
-        public List<Group> GetAll(int page, int pageSize)
+        public List<Group> GetAll()
+        {
+            List<Group> groups = new List<Group>();
+            try
+            {
+                using SqliteConnection connection = new SqliteConnection(connectionString);
+                connection.Open();
+                string query = "SELECT Id, Name, CreationDate FROM Groups";
+                using SqliteCommand command = new SqliteCommand(query, connection);
+                using SqliteDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    Group group = new Group
+                    {
+                        Id = Convert.ToInt32(reader["Id"]),
+                        Name = reader["Name"].ToString(),
+                        CreatedDate = reader["CreationDate"] == DBNull.Value
+                        ? DateTime.MinValue
+                        : DateTime.ParseExact(reader["CreationDate"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                    };
+                    groups.Add(group);
+                }
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine($"Greska pri konekciji ili izvrsavanju neispravnih SQL upita: {ex.Message}");
+                throw;
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Greska u konverziji podataka iz baze: {ex.Message}");
+                throw;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Konekcija nije otvorena ili je otvorena vise puta: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Neocekivana greska: {ex.Message}");
+                throw;
+            }
+
+            return groups;
+        }
+
+        public List<Group> GetPaged(int page, int pageSize)
         {
             List<Group> groups = new List<Group>();
             try
@@ -49,24 +96,58 @@ namespace DrustvenaMrezaApi.Repositories
                 Console.WriteLine($"Greska u konverziji podataka iz baze: {ex.Message}");
                 throw;
             }
-            catch(FormatException ex)
+            catch (FormatException ex)
             {
                 Console.WriteLine($"Greska u konverziji podataka iz baze:{ex.Message}");
                 throw;
             }
-            catch(InvalidOperationException ex)
+            catch (InvalidOperationException ex)
             {
                 Console.WriteLine($"Konekcija nije otvorena ili je otvorena vise puta:{ex.Message}");
                 throw;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"Neocekivana greska: {ex.Message}");
                 throw;
             }
         }
 
-        public Group getById(int id)
+        public int CountAll()
+        {
+            try
+            {
+                using SqliteConnection connection = new SqliteConnection(connectionString);
+                connection.Open();
+                string query = "SELECT COUNT(*) FROM Groups";
+                using SqliteCommand command = new SqliteCommand(query, connection);
+
+                int count = Convert.ToInt32(command.ExecuteScalar());
+                return count;
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine($"Greska u konverziji podataka iz baze: {ex.Message}");
+                throw;
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Greska u konverziji podataka iz baze:{ex.Message}");
+                throw;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Konekcija nije otvorena ili je otvorena vise puta:{ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Neocekivana greska: {ex.Message}");
+                throw;
+            }
+        }
+
+        public Group GetById(int id)
         {
             try
             {
@@ -114,7 +195,7 @@ namespace DrustvenaMrezaApi.Repositories
         {
             try
             {
-                using SqliteConnection connection = new SqliteConnection(connectionString); 
+                using SqliteConnection connection = new SqliteConnection(connectionString);
                 connection.Open();
 
                 string query = @"INSERT INTO Groups(Name,CreationDate)
@@ -126,7 +207,7 @@ namespace DrustvenaMrezaApi.Repositories
                 group.Id = Convert.ToInt32(command.ExecuteScalar());
                 return group;
             }
-            catch(SqliteException ex)
+            catch (SqliteException ex)
             {
                 Console.WriteLine($"Greska pri konekciji ili pri izvrsavanju neispravnih SQL upita: {ex.Message}");
                 throw;
@@ -136,12 +217,12 @@ namespace DrustvenaMrezaApi.Repositories
                 Console.WriteLine($"Greska u konverziji podataka iz baze: {ex.Message}");
                 throw;
             }
-            catch(InvalidOperationException ex)
+            catch (InvalidOperationException ex)
             {
                 Console.WriteLine($"Konekcija nije otvorena ili je otvorena vise puta {ex.Message}");
                 throw;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"Neocekivana greska{ex.Message}");
                 throw;
@@ -158,7 +239,7 @@ namespace DrustvenaMrezaApi.Repositories
 
                 using SqliteCommand command = new SqliteCommand(query, connection);
                 command.Parameters.AddWithValue("@Id", updatedGroup.Id);
-                command.Parameters.AddWithValue("@Name",updatedGroup.Name);
+                command.Parameters.AddWithValue("@Name", updatedGroup.Name);
                 command.Parameters.AddWithValue("@CreationDate", updatedGroup.CreatedDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
 
                 int rowsAffected = command.ExecuteNonQuery();

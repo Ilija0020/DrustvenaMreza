@@ -21,8 +21,23 @@ namespace DrustvenaMrezaApi.Controllers
             groupDbRepository = new GroupDbRepository(configuration);
         }
         //GET api/groups
+
         [HttpGet]
-        public ActionResult<List<Group>> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        public ActionResult<List<Group>> GetAll()
+        {
+            try
+            {
+                List<Group> groups = groupDbRepository.GetAll();
+                return Ok(groups);
+            }
+            catch (Exception ex)
+            {
+                return Problem(detail: ex.Message, statusCode: 500);
+            }
+        }
+
+        [HttpGet("paged")]
+        public ActionResult<List<Group>> GetPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             if (page < 1 || pageSize < 1)
             {
@@ -30,26 +45,28 @@ namespace DrustvenaMrezaApi.Controllers
             }
             try
             {
-                List<Group> groups = groupDbRepository.GetAll(page, pageSize);
+                List<Group> groups = groupDbRepository.GetPaged(page, pageSize);
+                int totalCount = groupDbRepository.CountAll();
 
                 Object result = new
                 {
-                    Data = groups
+                    Data = groups,
+                    TotalCount = totalCount
                 };
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                return Problem(detail: ex.ToString(), statusCode: 500);
+                return Problem(detail: ex.Message, statusCode: 500);
             }
 
         }
         [HttpGet("{id}")]
-        public ActionResult<User> GetById(int id)
+        public ActionResult<Group> GetById(int id)
         {
             try
             {
-                Group group = groupDbRepository.getById(id);
+                Group group = groupDbRepository.GetById(id);
 
                 if (group == null)
                 {
@@ -85,7 +102,7 @@ namespace DrustvenaMrezaApi.Controllers
         [HttpPut("{id}")]
         public ActionResult<Group> Update(int id, [FromBody] Group updatedGroup)
         {
-            if(string.IsNullOrWhiteSpace(updatedGroup.Name))
+            if (string.IsNullOrWhiteSpace(updatedGroup.Name))
             {
                 return BadRequest();
             }
@@ -112,15 +129,15 @@ namespace DrustvenaMrezaApi.Controllers
             try
             {
                 bool isDeleted = groupDbRepository.Delete(id);
-                if(!isDeleted)
+                if (!isDeleted)
                 {
-                    return NotFound($"Korisnik sa ID {id} nije pronadjen");
+                    return NotFound($"Grupa sa ID {id} nije pronadjen");
                 }
                 return NoContent();
             }
-            catch(Exception)
+            catch (Exception)
             {
-                return Problem($"Doslo je do greske prilikom brisanja korisnika sa ID {id}.");
+                return Problem($"Doslo je do greske prilikom brisanja grupe sa ID {id}.");
             }
         }
 

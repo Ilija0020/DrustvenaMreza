@@ -32,6 +32,48 @@ namespace DrustvenaMrezaApi.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public ActionResult<Post> GetById(int id)
+        {
+            try
+            {
+                Post post = postDbRepository.GetById(id);
+                if (post == null)
+                {
+                    return NotFound($"Objava sa zadatim ID {id} nije pronađena.");
+                }
+                return Ok(post);
+            }
+            catch (Exception ex)
+            {
+                return Problem("Doslo je do greske prilikom dobavljanja objave: " + ex.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult<Post> Update(int id, [FromBody] Post updatedPost)
+        {
+            if (string.IsNullOrWhiteSpace(updatedPost.Content))
+            {
+                return BadRequest("Sadržaj objave ne sme biti prazan.");
+            }
+            try
+            {
+                updatedPost.Id = id;
+                Post post = postDbRepository.Update(updatedPost);
+
+                if (post == null)
+                {
+                    return NotFound($"Objava sa zadatim ID {id} nije pronađena.");
+                }
+                return Ok(post);
+            }
+            catch (Exception ex)
+            {
+                return Problem("Doslo je do greske prilikom azuriranja objave: " + ex.Message);
+            }
+        }
+
         [HttpPost]
         public ActionResult<Post> Create([FromBody] Post newPost)
         {

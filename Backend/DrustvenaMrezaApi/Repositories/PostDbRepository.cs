@@ -71,6 +71,69 @@ namespace DrustvenaMrezaApi.Repositories
             }
         }
 
+        public Post GetById(int id)
+        {
+            try
+            {
+                using SqliteConnection connection = new SqliteConnection(connectionString);
+                connection.Open();
+                string query = @"
+                    SELECT p.Id, p.Content, P.Date, P.UserId,
+                    u.Username, u.Name AS Firstname, u.Surname AS Lastname, u.Birthday AS DateOfBirth
+                    FROM Posts p
+                    INNER JOIN Users u ON p.UserId = u.Id
+                    WHERE p.Id = @Id";
+
+                using SqliteCommand command = new SqliteCommand(query, connection);
+                command.Parameters.AddWithValue("@Id", id);
+                using SqliteDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    Post post = new Post()
+                    {
+                        Id = Convert.ToInt32(reader["Id"]),
+                        Content = reader["Content"].ToString(),
+                        UserId = Convert.ToInt32(reader["UserId"]),
+                        Date = reader["Date"] == DBNull.Value
+                        ? DateTime.MinValue
+                        : DateTime.ParseExact(reader["Date"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture),
+                        Author = new User()
+                        {
+                            Id = Convert.ToInt32(reader["UserId"]),
+                            Username = reader["Username"].ToString(),
+                            FirstName = reader["Firstname"].ToString(),
+                            LastName = reader["Lastname"].ToString(),
+                            DateOfBirth = reader["DateOfBirth"] == DBNull.Value
+                            ? DateTime.MinValue
+                            : DateTime.ParseExact(reader["DateOfBirth"].ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                        }
+                    };
+                    return post;
+                }
+                return null;
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine($"Greška pri konekciji ili izvršavanju neispravnih SQL upita: {ex.Message}");
+                throw;
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Greška u konverziji podataka iz baze: {ex.Message}");
+                throw;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Konekcija nije otvorena ili je otvorena više puta: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Neočekivana greška: {ex.Message}");
+                throw;
+            }
+        }
+
         public Post Create(Post newPost)
         {
             try
@@ -89,6 +152,50 @@ namespace DrustvenaMrezaApi.Repositories
 
                 newPost.Id = Convert.ToInt32(command.ExecuteScalar());
                 return newPost;
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine($"Greška pri konekciji ili izvršavanju neispravnih SQL upita: {ex.Message}");
+                throw;
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Greška u konverziji podataka iz baze: {ex.Message}");
+                throw;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Konekcija nije otvorena ili je otvorena više puta: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Neočekivana greška: {ex.Message}");
+                throw;
+            }
+        }
+
+        public Post Update(Post updatedPost)
+        {
+            try
+            {
+                using SqliteConnection connection = new SqliteConnection(connectionString);
+                connection.Open();
+                string query = @"
+                    UPDATE Posts
+                    SET Content = @Content, Date = @Date
+                    WHERE Id = @Id";
+
+                using SqliteCommand command = new SqliteCommand(query, connection);
+                command.Parameters.AddWithValue("@Content", updatedPost.Content);
+                command.Parameters.AddWithValue("@Date", updatedPost.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+                command.Parameters.AddWithValue("@Id", updatedPost.Id);
+                int rowsAffected = command.ExecuteNonQuery();
+                if (rowsAffected > 0)
+                {
+                    return updatedPost;
+                }
+                return null;
             }
             catch (SqliteException ex)
             {
