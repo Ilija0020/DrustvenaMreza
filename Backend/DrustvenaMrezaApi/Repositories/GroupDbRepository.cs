@@ -203,7 +203,7 @@ namespace DrustvenaMrezaApi.Repositories
                                  SELECT LAST_INSERT_ROWID()";
                 using SqliteCommand command = new SqliteCommand(query, connection);
                 command.Parameters.AddWithValue("@Name", group.Name);
-                command.Parameters.AddWithValue("@CreationDate", group.CreatedDate);
+                command.Parameters.AddWithValue("@CreationDate", group.CreatedDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
                 group.Id = Convert.ToInt32(command.ExecuteScalar());
                 return group;
             }

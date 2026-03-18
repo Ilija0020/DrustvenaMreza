@@ -6,3 +6,7 @@ export interface Group {
   createdDate: string | Date;
   members?: User[];
 }
+export interface PagedGroupResult {
+  data: Group[];
+  totalCount: number;
+}

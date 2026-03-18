@@ -4,7 +4,7 @@ export class UserService {
   private apiUrl: string;
 
   constructor() {
-    this.apiUrl = "http://localhost:17948/api/users";
+    this.apiUrl = "http://localhost:5152/api/users";
   }
 
   getAll(): Promise<User[]> {
