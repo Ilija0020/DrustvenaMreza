@@ -2,7 +2,6 @@ import { User } from "../../models/user.model";
 import { UserService } from "../../services/user.service";
 import { GroupMembersService } from "../../services/group-members.service";
 
-// Inicijalizujemo oba servisa koja su nam potrebna
 const userService = new UserService();
 const groupMembersService = new GroupMembersService();
 
@@ -26,7 +25,6 @@ function initialize(): void {
     });
   }
 
-  // Pokrećemo učitavanje podataka
   loadData(groupId);
 }
 
@@ -37,12 +35,10 @@ function loadData(groupId: number): void {
     userService.getAll(),
   ])
     .then(([usersInGroup, allUsers]) => {
-      // Magija filtriranja: Nalazimo sve korisnike koji NISU u nizu 'usersInGroup'
       const usersOutOfGroup = allUsers.filter(
         (user) => !usersInGroup.some((member) => member.id === user.id),
       );
 
-      // Crtamo obe tabele
       renderTable("#in-group tbody", usersInGroup, groupId, true);
       renderTable("#out-of-group tbody", usersOutOfGroup, groupId, false);
     })
@@ -89,32 +85,29 @@ function renderTable(
     const cell5 = document.createElement("td");
     const button = document.createElement("button");
 
-    // Podešavamo tekst dugmeta na osnovu toga da li je u grupi ili ne
     if (isMember) {
       button.textContent = "Remove";
+      button.className = "btn btn-danger";
     } else {
       button.textContent = "Insert";
+      button.className = "btn btn-primary";
     }
 
-    // Klik na dugme
     button.addEventListener("click", () => {
-      // Sigurnosna provera za ID
       if (user.id === undefined) return;
 
       if (isMember) {
-        // Ako je član, izbacujemo ga
         groupMembersService
           .removeUserFromGroup(groupId, user.id)
           .then(() => {
-            loadData(groupId); // Odmah osvežavamo tabele
+            loadData(groupId);
           })
           .catch(() => alert("Došlo je do greške pri izbacivanju korisnika."));
       } else {
-        // Ako nije član, ubacujemo ga
         groupMembersService
           .addUserToGroup(groupId, user.id)
           .then(() => {
-            loadData(groupId); // Odmah osvežavamo tabele
+            loadData(groupId);
           })
           .catch(() => alert("Došlo je do greške pri ubacivanju korisnika."));
       }

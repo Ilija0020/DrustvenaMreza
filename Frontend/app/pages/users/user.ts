@@ -72,7 +72,7 @@ function renderData(data: User[]) {
     const editBtn = document.createElement("button");
     editBtn.textContent = "Edit";
 
-    editBtn.className = "btn-primary";
+    editBtn.className = "btn btn-secondary";
     editBtn.addEventListener("click", () => {
       window.location.href = `../usersForm/usersForm.html?id=${user.id}`;
     });
@@ -80,7 +80,7 @@ function renderData(data: User[]) {
 
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Delete";
-    deleteBtn.className = "btn-delete";
+    deleteBtn.className = "btn btn-danger";
 
     deleteBtn.addEventListener("click", () => {
       userService

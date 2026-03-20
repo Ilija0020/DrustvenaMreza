@@ -4,7 +4,6 @@ import { GroupService } from "../../services/group.service";
 const groupService = new GroupService();
 
 function initializeGroups(): void {
-  // TypeScript zahteva da mu kažemo koji je tačno HTML element u pitanju
   const addBtn = document.querySelector("#addGroupBtn") as HTMLButtonElement;
 
   if (addBtn) {
@@ -17,7 +16,6 @@ function initializeGroups(): void {
 }
 
 function getAllGroups(): void {
-  // Ovde sada pozivamo naš uredan servis, a ne sirov fetch
   groupService
     .getAll()
     .then((groups: Group[]) => {
@@ -32,7 +30,6 @@ function getAllGroups(): void {
 }
 
 function renderGroups(data: Group[]): void {
-  // Dodajemo tipove za elemente iz tabele
   const tableBody = document.querySelector(
     "#groups-tbody",
   ) as HTMLTableSectionElement;
@@ -43,7 +40,6 @@ function renderGroups(data: Group[]): void {
     "#no-data-message",
   ) as HTMLParagraphElement;
 
-  // Sigurnosna provera da TypeScript ne bi prijavljivao greške da elementi možda ne postoje
   if (!tableBody || !tableHeader || !noDataMessage) return;
 
   tableBody.innerHTML = "";
@@ -58,23 +54,20 @@ function renderGroups(data: Group[]): void {
     data.forEach((group: Group) => {
       const newRow = document.createElement("tr");
 
-      // 1. Naziv grupe
       const cellName = document.createElement("td");
       cellName.textContent = group.name;
       cellName.style.fontWeight = "bold";
       newRow.appendChild(cellName);
 
-      // 2. Datum kreiranja grupe
       const cellDate = document.createElement("td");
       const dateString = group.createdDate.toString().split("T")[0];
       cellDate.textContent = dateString;
       newRow.appendChild(cellDate);
 
-      // 3. Dugme za članove
       const cellMembers = document.createElement("td");
       const membersBtn = document.createElement("button");
       membersBtn.textContent = "View Members";
-      membersBtn.className = "btn-add";
+      membersBtn.className = "btn btn-primary";
 
       membersBtn.addEventListener("click", () => {
         window.location.href = `../members/members.html?id=${group.id}&name=${encodeURIComponent(group.name)}`;
@@ -83,20 +76,18 @@ function renderGroups(data: Group[]): void {
       cellMembers.appendChild(membersBtn);
       newRow.appendChild(cellMembers);
 
-      // 4. Dugme za brisanje
       const cellDelete = document.createElement("td");
       const deleteButton = document.createElement("button");
       deleteButton.textContent = "Delete";
-      deleteButton.className = "btn-delete";
+      deleteButton.className = "btn btn-danger";
 
       deleteButton.addEventListener("click", () => {
         if (confirm(`Da li želite da obrišete grupu: ${group.name}?`)) {
-          // TypeScript pametno upozorava da 'id' može biti undefined (jer je opcioni u modelu), pa moramo to da proverimo
           if (group.id !== undefined) {
             groupService
               .delete(group.id)
               .then(() => {
-                getAllGroups(); // Osvežavamo tabelu nakon uspešnog brisanja
+                getAllGroups();
               })
               .catch((err) => {
                 console.error("Greška pri brisanju:", err);

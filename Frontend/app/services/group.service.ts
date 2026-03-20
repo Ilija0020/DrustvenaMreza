@@ -7,7 +7,6 @@ export class GroupService {
     this.apiUrl = "http://localhost:5152/api/groups";
   }
 
-  // Dohvata SVE grupe (bez paginacije)
   getAll(): Promise<Group[]> {
     return fetch(this.apiUrl)
       .then((response) => {
@@ -31,7 +30,6 @@ export class GroupService {
       });
   }
 
-  // Dohvata grupe sa paginacijom
   getPaged(page: number, pageSize: number): Promise<PagedGroupResult> {
     return fetch(`${this.apiUrl}/paged?page=${page}&pageSize=${pageSize}`)
       .then((response) => {
@@ -43,7 +41,7 @@ export class GroupService {
         return response.json();
       })
       .then((data: PagedGroupResult) => {
-        return data; // Vraća objekat { data: Group[], totalCount: number }
+        return data;
       })
       .catch((error) => {
         console.error(
@@ -55,7 +53,6 @@ export class GroupService {
       });
   }
 
-  // Dohvata jednu grupu po ID-ju
   getById(id: number): Promise<Group> {
     return fetch(this.apiUrl + "/" + id)
       .then((response) => {
@@ -79,7 +76,6 @@ export class GroupService {
       });
   }
 
-  // Kreira novu grupu
   create(group: Group): Promise<Group> {
     return fetch(this.apiUrl, {
       method: "POST",
@@ -109,7 +105,6 @@ export class GroupService {
       });
   }
 
-  // Menja postojeću grupu
   update(id: number, group: Group): Promise<Group> {
     return fetch(this.apiUrl + "/" + id, {
       method: "PUT",
@@ -139,7 +134,6 @@ export class GroupService {
       });
   }
 
-  // Briše grupu
   delete(id: number): Promise<void> {
     return fetch(this.apiUrl + "/" + id, {
       method: "DELETE",

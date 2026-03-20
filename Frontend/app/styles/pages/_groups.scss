@@ -1,0 +1,12 @@
+@use '../abstracts/variables' as *;
+
+.group-name-link {
+  color: $secondary-color;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $primary-color;
+  }
+}

@@ -1,0 +1,21 @@
+@use '../abstracts/variables' as *;
+@use "sass:color";
+
+.no-data-message {
+  text-align: center;
+  padding: 2rem;
+  color: $secondary-color;
+  font-style: italic;
+  margin-top: 20px;
+}
+
+p.info-text {
+  text-align: center;
+  color: color.adjust($text-color, $lightness: 20%);
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+.hidden {
+  display: none;
+}

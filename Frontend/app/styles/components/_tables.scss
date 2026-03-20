@@ -1,0 +1,55 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+.table-container {
+  max-width: 1200px;
+  margin: 20px auto 40px auto;
+  background: $white;
+  border-radius: $border-radius;
+  @include box-shadow;
+  
+  @include respond-to('mobile') {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead th {
+      background-color: $secondary-color;
+      color: $white;
+      padding: 15px 20px;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: left;
+
+      &:last-child {
+        text-align: center;
+      }
+    }
+
+    tbody td {
+      padding: 15px 20px;
+      border-bottom: 1px solid #eee;
+      color: $text-color;
+
+      &:last-child {
+        @include flex-center;
+        gap: 6px;
+      }
+    }
+
+    tbody tr {
+      transition: background 0.2s ease;
+      
+      &:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+      &:hover {
+        background-color: #eef2f7;
+      }
+    }
+  }
+}

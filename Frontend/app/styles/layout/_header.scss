@@ -1,0 +1,58 @@
+@use '../abstracts/variables' as *;
+
+.navbar {
+  background-color: $secondary-color;
+  color: $white;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  ul.nav-links {
+    list-style: none;
+    display: flex;
+    margin-left: auto;
+
+    li {
+      margin-left: 20px;
+
+      a {
+        color: $white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+  }
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 20px;
+  padding: 0 10px;
+
+  h2 {
+    margin: 0;
+    text-align: left;
+    border: none;
+    color: $secondary-color;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    padding-bottom: 5px;
+  }
+}

@@ -1,0 +1,47 @@
+@use "../abstracts/variables" as *;
+@use "sass:color";
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  border-radius: $border-radius;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: $primary-color;
+  color: $white;
+
+  &:hover {
+    background-color: color.adjust($primary-color, $lightness: -10%);
+  }
+
+  &:disabled {
+    background-color: color.adjust($primary-color, $lightness: 20%);
+    cursor: not-allowed;
+  }
+}
+
+.btn-secondary {
+  background-color: $gray-color;
+  color: $white;
+
+  &:hover {
+    background-color: color.adjust($gray-color, $lightness: -10%);
+  }
+}
+
+.btn-danger {
+  background-color: $danger-color;
+  color: $white;
+
+  &:hover {
+    background-color: color.adjust($danger-color, $lightness: -10%);
+  }
+}

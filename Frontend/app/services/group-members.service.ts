@@ -4,11 +4,9 @@ export class GroupMembersService {
   private baseUrl: string;
 
   constructor() {
-    // Osnovni URL do kog idemo, a posle ćemo dodavati ID-jeve
     this.baseUrl = "http://localhost:5152/api/groups";
   }
 
-  // 1. DOHVATANJE ČLANOVA GRUPE (GET api/groups/{groupId}/users)
   getUsersInGroup(groupId: number): Promise<User[]> {
     return fetch(`${this.baseUrl}/${groupId}/users`)
       .then((response) => {
@@ -32,7 +30,6 @@ export class GroupMembersService {
       });
   }
 
-  // 2. DODAVANJE KORISNIKA U GRUPU (PUT api/groups/{groupId}/users/{userId})
   addUserToGroup(groupId: number, userId: number): Promise<void> {
     return fetch(`${this.baseUrl}/${groupId}/users/${userId}`, {
       method: "PUT",
@@ -43,7 +40,6 @@ export class GroupMembersService {
             throw { status: response.status, message: errorMessage };
           });
         }
-        // Backend vraća Ok() bez podataka, pa ne zovemo response.json()
       })
       .catch((error) => {
         console.error(
@@ -55,7 +51,6 @@ export class GroupMembersService {
       });
   }
 
-  // 3. IZBACIVANJE KORISNIKA IZ GRUPE (DELETE api/groups/{groupId}/users/{userId})
   removeUserFromGroup(groupId: number, userId: number): Promise<void> {
     return fetch(`${this.baseUrl}/${groupId}/users/${userId}`, {
       method: "DELETE",
@@ -66,7 +61,6 @@ export class GroupMembersService {
             throw { status: response.status, message: errorMessage };
           });
         }
-        // Backend vraća NoContent() bez podataka, pa ne zovemo response.json()
       })
       .catch((error) => {
         console.error(
