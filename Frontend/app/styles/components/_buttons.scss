@@ -1,5 +1,6 @@
 @use "../abstracts/variables" as *;
 @use "sass:color";
+@use "../abstracts/mixins" as *;
 
 .btn {
   display: inline-block;
@@ -15,12 +16,8 @@
 }
 
 .btn-primary {
-  background-color: $primary-color;
+  @include btn-color($primary-color);
   color: $white;
-
-  &:hover {
-    background-color: color.adjust($primary-color, $lightness: -10%);
-  }
 
   &:disabled {
     background-color: color.adjust($primary-color, $lightness: 20%);
@@ -29,19 +26,11 @@
 }
 
 .btn-secondary {
-  background-color: $gray-color;
+  @include btn-color($gray-color);
   color: $white;
-
-  &:hover {
-    background-color: color.adjust($gray-color, $lightness: -10%);
-  }
 }
 
 .btn-danger {
-  background-color: $danger-color;
+  @include btn-color($danger-color);
   color: $white;
-
-  &:hover {
-    background-color: color.adjust($danger-color, $lightness: -10%);
-  }
 }
