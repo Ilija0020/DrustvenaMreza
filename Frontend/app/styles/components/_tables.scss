@@ -15,6 +15,7 @@
   table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
 
     thead th {
       background-color: $secondary-color;
@@ -38,6 +39,10 @@
       &:last-child {
         @include flex-center;
         gap: 6px;
+
+        .btn {
+          min-width: 100px;
+        }
       }
     }
 
