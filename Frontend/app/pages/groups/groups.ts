@@ -1,5 +1,5 @@
-import { Group } from "../models/group.model";
-import { GroupService } from "../services/group.service";
+import { Group } from "../../models/group.model";
+import { GroupService } from "../../services/group.service";
 
 const groupService = new GroupService();
 

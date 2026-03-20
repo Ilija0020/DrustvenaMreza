@@ -1,6 +1,6 @@
-import { User } from "../models/user.model";
-import { UserService } from "../services/user.service";
-import { GroupMembersService } from "../services/group-members.service";
+import { User } from "../../models/user.model";
+import { UserService } from "../../services/user.service";
+import { GroupMembersService } from "../../services/group-members.service";
 
 // Inicijalizujemo oba servisa koja su nam potrebna
 const userService = new UserService();
