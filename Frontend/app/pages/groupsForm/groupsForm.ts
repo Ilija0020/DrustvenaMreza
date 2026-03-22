@@ -3,6 +3,16 @@ import { GroupService } from "../../services/group.service";
 
 const groupService = new GroupService();
 
+function showSpinner(): void {
+  const spinner = document.querySelector("#loadingSpinner") as HTMLElement;
+  if (spinner) spinner.style.display = "block";
+}
+
+function hideSpinner(): void {
+  const spinner = document.querySelector("#loadingSpinner") as HTMLElement;
+  if (spinner) spinner.style.display = "none";
+}
+
 function initializeAddGroup(): void {
   const saveBtn = document.querySelector("#saveGroupBtn") as HTMLButtonElement;
   const cancelBtn = document.querySelector("#cancelBtn") as HTMLButtonElement;
@@ -20,6 +30,14 @@ function initializeAddGroup(): void {
 
 function saveNewGroup(): void {
   const saveBtn = document.querySelector("#saveGroupBtn") as HTMLButtonElement;
+  const globalError = document.querySelector(
+    "#globalError",
+  ) as HTMLParagraphElement;
+
+  if (globalError) {
+    globalError.textContent = "";
+    globalError.classList.add("hidden");
+  }
   if (saveBtn) {
     saveBtn.disabled = true;
     saveBtn.textContent = "Saving...";
@@ -45,6 +63,7 @@ function saveNewGroup(): void {
     name: groupName,
     createdDate: new Date().toISOString().split("T")[0], // Generiše današnji datum u YYYY-MM-DD formatu
   };
+  showSpinner();
 
   groupService
     .create(newGroup)
@@ -53,14 +72,16 @@ function saveNewGroup(): void {
     })
     .catch((error) => {
       console.error("Error:", error.message);
+      hideSpinner();
       if (saveBtn) {
         saveBtn.disabled = false;
         saveBtn.textContent = "Save Group";
       }
-      if (error.status === 400) {
-        if (nameError) nameError.textContent = "Invalid data sent to server.";
-      } else {
-        alert("An error occurred while communicating with the server.");
+
+      if (globalError) {
+        globalError.textContent =
+          "Došlo je do greške na serveru: " + error.message;
+        globalError.classList.remove("hidden");
       }
     });
 }

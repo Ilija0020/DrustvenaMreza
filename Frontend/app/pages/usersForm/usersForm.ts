@@ -3,6 +3,16 @@ import { UserService } from "../../services/user.service";
 
 const userService = new UserService();
 
+function showSpinner(): void {
+  const spinner = document.querySelector("#loadingSpinner") as HTMLElement;
+  if (spinner) spinner.style.display = "block";
+}
+
+function hideSpinner(): void {
+  const spinner = document.querySelector("#loadingSpinner") as HTMLElement;
+  if (spinner) spinner.style.display = "none";
+}
+
 function initialize(): void {
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get("id");
@@ -45,6 +55,14 @@ function initialize(): void {
 
 function saveNewUser(): void {
   const saveBtn = document.querySelector("#saveUserBtn") as HTMLButtonElement;
+  const globalError = document.querySelector(
+    "#globalError",
+  ) as HTMLParagraphElement;
+
+  if (globalError) {
+    globalError.textContent = "";
+    globalError.classList.add("hidden");
+  }
   if (saveBtn) {
     saveBtn.disabled = true;
     saveBtn.textContent = "Saving...";
@@ -58,6 +76,8 @@ function saveNewUser(): void {
     }
     return;
   }
+  showSpinner();
+
   userService
     .create(newUser)
     .then(() => {
@@ -65,16 +85,29 @@ function saveNewUser(): void {
     })
     .catch((error) => {
       console.error("Error creating user: ", error.status, error.message);
+      hideSpinner();
       if (saveBtn) {
         saveBtn.disabled = false;
         saveBtn.textContent = "Save User";
       }
-      alert("Doslo je do greske pri cuvanju korisnika: " + error.message);
+      if (globalError) {
+        globalError.textContent =
+          "Došlo je do greške na serveru: " + error.message;
+        globalError.classList.remove("hidden");
+      }
     });
 }
 
 function editUser(): void {
   const saveBtn = document.querySelector("#saveUserBtn") as HTMLButtonElement;
+  const globalError = document.querySelector(
+    "#globalError",
+  ) as HTMLParagraphElement;
+
+  if (globalError) {
+    globalError.textContent = "";
+    globalError.classList.add("hidden");
+  }
   if (saveBtn) {
     saveBtn.disabled = true;
     saveBtn.textContent = "Saving...";
@@ -90,6 +123,7 @@ function editUser(): void {
     }
     return;
   }
+  showSpinner();
 
   userService
     .update(parseInt(userId), userData)
@@ -98,11 +132,16 @@ function editUser(): void {
     })
     .catch((error) => {
       console.error("Error updating user: ", error.status, error.message);
+      hideSpinner();
       if (saveBtn) {
         saveBtn.disabled = false;
         saveBtn.textContent = "Save User";
       }
-      alert("An error occurred while updating the user: " + error.message);
+      if (globalError) {
+        globalError.textContent =
+          "Došlo je do greške na serveru: " + error.message;
+        globalError.classList.remove("hidden");
+      }
     });
 }
 
