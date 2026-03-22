@@ -1,0 +1,56 @@
+@use "../abstracts/variables" as *;
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  width: 160px;
+  background-color: $secondary-color;
+  color: $white;
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: $border-radius;
+  font-size: 0.85rem;
+  font-weight: normal;
+
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 0%;
+
+  transition:
+    opacity 0.3s,
+    visibility 0.3s;
+  transition-delay: 1s;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border-width: 6px;
+    border-style: solid;
+    border-color: $secondary-color transparent transparent transparent;
+  }
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.form-actions .tooltip-container {
+  display: block;
+  width: 100%;
+
+  .tooltip-text {
+    width: 100%;
+    bottom: 115%;
+    left: 0;
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+}

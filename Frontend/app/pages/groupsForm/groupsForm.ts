@@ -19,6 +19,12 @@ function initializeAddGroup(): void {
 }
 
 function saveNewGroup(): void {
+  const saveBtn = document.querySelector("#saveGroupBtn") as HTMLButtonElement;
+  if (saveBtn) {
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Saving...";
+  }
+
   const nameInput = document.querySelector("#groupName") as HTMLInputElement;
   const nameError = document.querySelector("#nameError") as HTMLSpanElement;
 
@@ -28,6 +34,10 @@ function saveNewGroup(): void {
 
   if (!groupName) {
     if (nameError) nameError.textContent = "Name field is required.";
+    if (saveBtn) {
+      saveBtn.disabled = false;
+      saveBtn.textContent = "Save Group";
+    }
     return;
   }
 
@@ -43,6 +53,10 @@ function saveNewGroup(): void {
     })
     .catch((error) => {
       console.error("Error:", error.message);
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.textContent = "Save Group";
+      }
       if (error.status === 400) {
         if (nameError) nameError.textContent = "Invalid data sent to server.";
       } else {

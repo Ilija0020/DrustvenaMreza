@@ -1,20 +1,21 @@
 // 1. Abstracts
-@use 'abstracts/variables';
-@use 'abstracts/mixins';
+@use "abstracts/variables";
+@use "abstracts/mixins";
 
 // 2. Base
-@use 'base/reset';
-@use 'base/typography';
+@use "base/reset";
+@use "base/typography";
 
 // 3. Layout
-@use 'layout/header';
-@use 'layout/grid';
+@use "layout/header";
+@use "layout/grid";
 
 // 4. Components
-@use 'components/buttons';
-@use 'components/tables';
-@use 'components/forms';
-@use 'components/messages';
+@use "components/buttons";
+@use "components/tables";
+@use "components/forms";
+@use "components/messages";
+@use "components/tooltips";
 
 // 5. Pages
-@use 'pages/home';
+@use "pages/home";

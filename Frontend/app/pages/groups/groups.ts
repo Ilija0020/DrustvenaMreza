@@ -73,7 +73,15 @@ function renderGroups(data: Group[]): void {
         window.location.href = `../members/members.html?id=${group.id}&name=${encodeURIComponent(group.name)}`;
       });
 
-      cellMembers.appendChild(membersBtn);
+      const membersTooltipContainer = document.createElement("div");
+      membersTooltipContainer.className = "tooltip-container";
+      const membersTooltipText = document.createElement("span");
+      membersTooltipText.className = "tooltip-text";
+      membersTooltipText.textContent = "Prikaži članove ove grupe.";
+
+      membersTooltipContainer.appendChild(membersBtn);
+      membersTooltipContainer.appendChild(membersTooltipText);
+      cellMembers.appendChild(membersTooltipContainer);
       newRow.appendChild(cellMembers);
 
       const cellDelete = document.createElement("td");
@@ -97,7 +105,16 @@ function renderGroups(data: Group[]): void {
         }
       });
 
-      cellDelete.appendChild(deleteButton);
+      const deleteTooltipContainer = document.createElement("div");
+      deleteTooltipContainer.className = "tooltip-container";
+      const deleteTooltipText = document.createElement("span");
+      deleteTooltipText.className = "tooltip-text";
+      deleteTooltipText.textContent = "Obriši grupu.";
+
+      deleteTooltipContainer.appendChild(deleteButton);
+      deleteTooltipContainer.appendChild(deleteTooltipText);
+      cellDelete.appendChild(deleteTooltipContainer);
+
       newRow.appendChild(cellDelete);
 
       tableBody.appendChild(newRow);

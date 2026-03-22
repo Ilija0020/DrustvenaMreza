@@ -44,8 +44,20 @@ function initialize(): void {
 }
 
 function saveNewUser(): void {
+  const saveBtn = document.querySelector("#saveUserBtn") as HTMLButtonElement;
+  if (saveBtn) {
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Saving...";
+  }
+
   const newUser = collectData();
-  if (!newUser) return;
+  if (!newUser) {
+    if (saveBtn) {
+      saveBtn.disabled = false;
+      saveBtn.textContent = "Save User";
+    }
+    return;
+  }
   userService
     .create(newUser)
     .then(() => {
@@ -53,16 +65,31 @@ function saveNewUser(): void {
     })
     .catch((error) => {
       console.error("Error creating user: ", error.status, error.message);
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.textContent = "Save User";
+      }
       alert("Doslo je do greske pri cuvanju korisnika: " + error.message);
     });
 }
 
 function editUser(): void {
+  const saveBtn = document.querySelector("#saveUserBtn") as HTMLButtonElement;
+  if (saveBtn) {
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Saving...";
+  }
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get("id");
 
   const userData = collectData();
-  if (!userData || !userId) return;
+  if (!userData || !userId) {
+    if (saveBtn) {
+      saveBtn.disabled = false;
+      saveBtn.textContent = "Save User";
+    }
+    return;
+  }
 
   userService
     .update(parseInt(userId), userData)
@@ -71,6 +98,10 @@ function editUser(): void {
     })
     .catch((error) => {
       console.error("Error updating user: ", error.status, error.message);
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.textContent = "Save User";
+      }
       alert("An error occurred while updating the user: " + error.message);
     });
 }

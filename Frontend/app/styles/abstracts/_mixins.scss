@@ -1,4 +1,4 @@
-@use 'variables' as *;
+@use "variables" as *;
 @use "sass:color";
 
 @mixin flex-center {
@@ -12,15 +12,15 @@
 }
 
 @mixin respond-to($device) {
-  @if $device == 'mobile' {
+  @if $device == "mobile" {
     @media (max-width: $breakpoint-mobile) {
       @content;
     }
-  } @else if $device == 'tablet' {
+  } @else if $device == "tablet" {
     @media (max-width: $breakpoint-tablet) {
       @content;
     }
-  } @else if $device == 'laptop' {
+  } @else if $device == "laptop" {
     @media (max-width: $breakpoint-laptop) {
       @content;
     }
@@ -29,7 +29,14 @@
 
 @mixin btn-color($color) {
   background-color: $color;
-  &:hover {
-    background-color: color.adjust($color, $lightness: -10%);
+  &:hover:not(:disabled) {
+    background-color: color.adjust($color, $lightness: 10%);
+    transform: scale(1.05);
+  }
+  &:disabled {
+    background-color: color.adjust($color, $lightness: 20%);
+    color: color.adjust($text-color, $lightness: 30%);
+    cursor: not-allowed;
+    transform: none;
   }
 }

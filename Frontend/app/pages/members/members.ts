@@ -113,7 +113,21 @@ function renderTable(
       }
     });
 
-    cell5.appendChild(button);
+    // TOOLTIP
+    const tooltipContainer = document.createElement("div");
+    tooltipContainer.className = "tooltip-container";
+
+    const tooltipText = document.createElement("div");
+    tooltipText.className = "tooltip-text";
+
+    tooltipText.textContent = isMember
+      ? "Trajno uklanja korisnika iz ove grupe."
+      : "Dodaje izabranog korisnika u ovu grupu.";
+
+    tooltipContainer.appendChild(button);
+    tooltipContainer.appendChild(tooltipText);
+
+    cell5.appendChild(tooltipContainer);
     newRow.appendChild(cell5);
 
     tableBody.appendChild(newRow);

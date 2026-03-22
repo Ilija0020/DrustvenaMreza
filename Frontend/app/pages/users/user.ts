@@ -76,7 +76,6 @@ function renderData(data: User[]) {
     editBtn.addEventListener("click", () => {
       window.location.href = `../usersForm/usersForm.html?id=${user.id}`;
     });
-    cell5.appendChild(editBtn);
 
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Delete";
@@ -92,9 +91,28 @@ function renderData(data: User[]) {
           console.error("Error deleting user: ", error.status, error.message);
         });
     });
-    cell5.appendChild(deleteBtn);
-    newRow.appendChild(cell5);
 
+    const editTooltipContainer = document.createElement("div");
+    editTooltipContainer.className = "tooltip-container";
+    const editTooltipText = document.createElement("span");
+    editTooltipText.className = "tooltip-text";
+    editTooltipText.textContent = "Izmeni podatke o korisniku.";
+
+    editTooltipContainer.appendChild(editBtn);
+    editTooltipContainer.appendChild(editTooltipText);
+    cell5.appendChild(editTooltipContainer);
+
+    const deleteTooltipContainer = document.createElement("div");
+    deleteTooltipContainer.className = "tooltip-container";
+    const deleteTooltipText = document.createElement("span");
+    deleteTooltipText.className = "tooltip-text";
+    deleteTooltipText.textContent = "Obriši korisnika.";
+
+    deleteTooltipContainer.appendChild(deleteBtn);
+    deleteTooltipContainer.appendChild(deleteTooltipText);
+    cell5.appendChild(deleteTooltipContainer);
+
+    newRow.appendChild(cell5);
     tableBody.appendChild(newRow);
   });
 }

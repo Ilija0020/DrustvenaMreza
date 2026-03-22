@@ -728,6 +728,10 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Baze podataka i SQLite projektni fajlovi
+*.db
+*.sqbpro
+
 ### VisualStudio ###
 
 # User-specific files
